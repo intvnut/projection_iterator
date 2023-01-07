@@ -166,7 +166,7 @@ constexpr inline auto make_projection_iterator(
       return copy;
     }
 
-    // Supresses meaningless warnings about these types not being used.
+    // Suppresses meaningless warnings about these types not being used.
     // They are actually used, but G++'s warning gets it wrong.
     void unused_(iterator_category, difference_type, value_type, pointer,
                  reference) {}
