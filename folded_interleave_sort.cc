@@ -30,7 +30,6 @@ auto make_folded_interleave_projection(ptrdiff_t size) {
 // Prints a span of values on stdout, separated by commas.
 template <typename Iter>
 void print_span(Iter first, Iter last) {
-
   for (Iter it = first; it != last; ++it) {
     if (it != first) {
       std::cout << ", ";
