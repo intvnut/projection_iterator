@@ -40,6 +40,15 @@ container, and sort the projected view of the container.  We can use the
 standard sort, and it never needs to know we transformed its view of the
 underlying container.
 
+(Note: I _did_ try to find who posed the original question, and I was unable
+to find it.  I will note that when I presented my idea of using a projection
+to simplify this, whoever asked the original question invited me to apply to
+my current employer; however, I already worked there.  LOL.
+
+If you recognize yourself as the person who posed the question, let me know
+and I will credit you.  I will say I apologize in advance that I am terrible
+at keeping up to date on my email.)
+
 ## The Adaptor: How It Works
 
 The projection adaptor takes a base random-access iterator and a projection
