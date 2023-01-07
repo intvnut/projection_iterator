@@ -42,9 +42,10 @@ void print_span(Iter first, Iter last) {
 
 int main() {
   std::random_device rd;
-  std::mt19937_64 g(rd());
-  std::vector<int> v{};
+  auto g  = std::mt19937_64{rd()};
+  auto v  = std::vector<int>{};
 
+  // Simple incrementing ranges in shuffled order.
   for (int i = 0; i < 15; ++i) {
     v.push_back(i);
     std::shuffle(v.begin(), v.end(), g);
@@ -67,4 +68,60 @@ int main() {
     print_span(fip_begin, fip_end);
     std::cout << "\n\n";
   }
+
+  // Random values in shuffled order.
+  for (int i = 0; i < 10; ++i) {
+    auto ui99 = std::uniform_int_distribution<>(0, 99);
+    for (auto& elem : v) {
+      elem = ui99(g);
+    }
+    std::shuffle(v.begin(), v.end(), g);
+
+    std::cout << "Before:   ";
+    print_span(v.cbegin(), v.cend());
+    std::cout << '\n';
+
+    auto fip_proj  = make_folded_interleave_projection(v.size());
+    auto fip_begin = make_projection_iterator(v.begin(), fip_proj);
+    auto fip_end   = fip_begin + v.size();
+
+    std::sort(fip_begin, fip_end);
+
+    std::cout << "After:    ";
+    print_span(v.cbegin(), v.cend());
+    std::cout << '\n';
+
+    std::cout << "FIP view: ";
+    print_span(fip_begin, fip_end);
+    std::cout << "\n\n";
+  }
+
+  // Again, but with one less value (to test even/odd length).
+  v.pop_back();
+  for (int i = 0; i < 10; ++i) {
+    auto ui99 = std::uniform_int_distribution<>(0, 99);
+    for (auto& elem : v) {
+      elem = ui99(g);
+    }
+    std::shuffle(v.begin(), v.end(), g);
+
+    std::cout << "Before:   ";
+    print_span(v.cbegin(), v.cend());
+    std::cout << '\n';
+
+    auto fip_proj  = make_folded_interleave_projection(v.size());
+    auto fip_begin = make_projection_iterator(v.begin(), fip_proj);
+    auto fip_end   = fip_begin + v.size();
+
+    std::sort(fip_begin, fip_end);
+
+    std::cout << "After:    ";
+    print_span(v.cbegin(), v.cend());
+    std::cout << '\n';
+
+    std::cout << "FIP view: ";
+    print_span(fip_begin, fip_end);
+    std::cout << "\n\n";
+  }
+
 }
