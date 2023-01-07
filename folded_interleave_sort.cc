@@ -41,11 +41,10 @@ void print_span(Iter first, Iter last) {
 
 }  // namespace
 
-
 int main() {
   std::random_device rd;
-  auto g  = std::mt19937_64{rd()};
-  auto v  = std::vector<int>{};
+  auto g = std::mt19937_64{rd()};
+  auto v = std::vector<int>{};
 
   // Simple incrementing ranges in shuffled order.
   for (int i = 0; i < 15; ++i) {
@@ -125,5 +124,4 @@ int main() {
     print_span(fip_begin, fip_end);
     std::cout << "\n\n";
   }
-
 }
