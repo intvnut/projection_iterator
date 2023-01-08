@@ -75,5 +75,5 @@ minimum.  I left C++11 out of scope.
 
 ____
 
-Copyright &copr; 2023, Joe Zbiciak <joe.zbiciak@leftturnonly.info>
+Copyright © 2023, Joe Zbiciak <joe.zbiciak@leftturnonly.info>
 `SPDX-License-Identifier:  CC-BY-SA-4.0`
