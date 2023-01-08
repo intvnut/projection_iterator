@@ -23,7 +23,7 @@ namespace jz {
 // the container relative to the base iterator.
 template <typename Iter, typename Callable>
 constexpr inline auto make_projection_iterator(
-    Iter base, Callable& projection) noexcept {
+    Iter base, Callable projection) noexcept {
   using std::ptrdiff_t;
 
   static_assert(
@@ -47,14 +47,25 @@ constexpr inline auto make_projection_iterator(
   // index into an actual index applied to the base iterator.
   class ProjIter {
    public:
-    explicit constexpr ProjIter(Iter base, Callable& projection) noexcept
-    : base_{std::move(base)}, projection_{&projection}, index_{0} {}
+    explicit constexpr ProjIter(Iter base, Callable projection) noexcept
+    : base_{std::move(base)}, projection_{std::move(projection)}, index_{0} {}
 
     ProjIter(const ProjIter&) = default;
     ProjIter(ProjIter&&) = default;
-    ProjIter& operator=(const ProjIter&) = default;
-    ProjIter& operator=(ProjIter&&) = default;
     ~ProjIter() = default;
+
+    // For copy and move assignment, assume base and projection are the
+    // same for both.  It's undefined behavior if it's not.
+    ProjIter& operator=(const ProjIter& rhs) noexcept {
+      base_  = rhs.base_;
+      index_ = rhs.index_;
+      return *this;
+    }
+    ProjIter& operator=(ProjIter&& rhs) noexcept {
+      base_  = rhs.base_;
+      index_ = rhs.index_;
+      return *this;
+    } 
 
     // Dereference returns an lvalue reference to the element.
     constexpr auto& operator*() const noexcept {
@@ -154,7 +165,7 @@ constexpr inline auto make_projection_iterator(
 
    private:
     Iter base_;
-    Callable* projection_;
+    Callable projection_;
     ptrdiff_t index_;
 
     // Returns the advanced pointer.  While we could do this with a simple
@@ -162,7 +173,7 @@ constexpr inline auto make_projection_iterator(
     // categories eventually.
     constexpr Iter projected_() const {
       Iter copy = base_;
-      std::advance(copy, (*projection_)(index_));
+      std::advance(copy, projection_(index_));
       return copy;
     }
 
@@ -172,7 +183,7 @@ constexpr inline auto make_projection_iterator(
                  reference) {}
   };
 
-  return ProjIter(base, projection);
+  return ProjIter(base, std::move(projection));
 }
 
 }  // namespace jz
