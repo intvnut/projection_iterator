@@ -8,9 +8,9 @@ static_assert(__cplusplus, "Requires C++11 or newer.");
 // C++11 has a much more limited form of constexpr that we cannot make use of
 // in many places.  So for C++11, just remove the constexpr.
 #if __cplusplus < 201400L
-# define CONSTEXPR_AFTER_CPP14 
+# define CONSTEXPR_AS_OF_CXX14 
 #else
-# define CONSTEXPR_AFTER_CPP14 constexpr
+# define CONSTEXPR_AS_OF_CXX14 constexpr
 #endif
 
 #include <cstddef>
@@ -87,46 +87,46 @@ class ProjIter {
   } 
 
   // Dereference returns an lvalue reference to the element.
-  CONSTEXPR_AFTER_CPP14 reference operator*() const noexcept {
+  CONSTEXPR_AS_OF_CXX14 reference operator*() const noexcept {
     return *projected_();
   }
 
   // Returns the original iterator offset to the correct point.
-  CONSTEXPR_AFTER_CPP14 value_type operator->() const noexcept {
+  CONSTEXPR_AS_OF_CXX14 value_type operator->() const noexcept {
     return projected_();
   }
 
   // Increments our index relative to first.
-  CONSTEXPR_AFTER_CPP14 ProjIter& operator++() noexcept {
+  CONSTEXPR_AS_OF_CXX14 ProjIter& operator++() noexcept {
     ++index_;
     return *this;
   }
 
-  CONSTEXPR_AFTER_CPP14 ProjIter operator++(int) noexcept {
+  CONSTEXPR_AS_OF_CXX14 ProjIter operator++(int) noexcept {
     auto copy = *this;
     this->operator++();
     return copy;
   }
 
   // Decrements our index relative to first.
-  CONSTEXPR_AFTER_CPP14 ProjIter& operator--() noexcept {
+  CONSTEXPR_AS_OF_CXX14 ProjIter& operator--() noexcept {
     --index_;
     return *this;
   }
 
-  CONSTEXPR_AFTER_CPP14 ProjIter operator--(int) noexcept {
+  CONSTEXPR_AS_OF_CXX14 ProjIter operator--(int) noexcept {
     auto copy = *this;
     this->operator--();
     return copy;
   }
 
   // Adds to our iterator.
-  CONSTEXPR_AFTER_CPP14 ProjIter& operator+=(const ptrdiff_t delta) noexcept {
+  CONSTEXPR_AS_OF_CXX14 ProjIter& operator+=(const ptrdiff_t delta) noexcept {
     index_ += delta;
     return *this;
   }
 
-  CONSTEXPR_AFTER_CPP14  ProjIter operator+(const ptrdiff_t delta)
+  CONSTEXPR_AS_OF_CXX14  ProjIter operator+(const ptrdiff_t delta)
       const noexcept {
     auto copy = *this;
     copy += delta;
@@ -134,12 +134,12 @@ class ProjIter {
   }
 
   // Subtracts from our iterator.
-  CONSTEXPR_AFTER_CPP14 ProjIter& operator-=(const ptrdiff_t delta) noexcept {
+  CONSTEXPR_AS_OF_CXX14 ProjIter& operator-=(const ptrdiff_t delta) noexcept {
     index_ += delta;
     return *this;
   }
 
-  CONSTEXPR_AFTER_CPP14 ProjIter operator-(const ptrdiff_t delta)
+  CONSTEXPR_AS_OF_CXX14 ProjIter operator-(const ptrdiff_t delta)
       const noexcept {
     auto copy = *this;
     copy -= delta;
@@ -186,7 +186,7 @@ class ProjIter {
   // Returns the advanced pointer.  While we could do this with a simple
   // addition, std::advance opens the possibility we include other iterator
   // categories eventually.
-  CONSTEXPR_AFTER_CPP14 Iter projected_() const {
+  CONSTEXPR_AS_OF_CXX14 Iter projected_() const {
     Iter copy = base_;
     std::advance(copy, projection_(index_));
     return copy;
@@ -204,6 +204,6 @@ constexpr inline auto make_projection_iterator(
 
 }  // namespace jz
 
-#undef CONSTEXPR_AFTER_CPP14
+#undef CONSTEXPR_AS_OF_CXX14
 
 #endif // PROJECTION_ITERATOR_HH_
