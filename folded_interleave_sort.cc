@@ -12,6 +12,7 @@ namespace {
 using std::ptrdiff_t;
 using jz::make_projection_iterator;
 
+#if __cplusplus >= 201400L
 // Returns a projection function for a particular size random-access container
 // such that this view through the projection:
 //
@@ -23,9 +24,31 @@ using jz::make_projection_iterator;
 auto make_folded_interleave_projection(ptrdiff_t size) {
   return [size](const ptrdiff_t index) {
     const auto index2 = 2 * index;
-    return index2 >= size ? 2*size - index2 - 1 : index2; 
+    return index2 >= size ? 2 * size - index2 - 1 : index2; 
   };
 }
+#else
+
+// C++11 version of the above.
+class FoldedInterleaveProjection {
+ public:
+  explicit FoldedInterleaveProjection(ptrdiff_t size) noexcept
+  : size_{size} {}
+
+  ptrdiff_t operator()(const ptrdiff_t index) const noexcept {
+    const auto index2 = 2 * index;
+    return index2 >= size_ ? 2 * size_ - index2 - 1 : index2; 
+  }
+
+ private:
+  ptrdiff_t size_;
+};
+
+FoldedInterleaveProjection make_folded_interleave_projection(ptrdiff_t size) {
+  return FoldedInterleaveProjection(size);
+}
+
+#endif
 
 // Prints a span of values on stdout, separated by commas.
 template <typename Iter>
