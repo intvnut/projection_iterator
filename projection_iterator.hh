@@ -126,7 +126,7 @@ class ProjIter {
     return *this;
   }
 
-  CONSTEXPR_AS_OF_CXX14  ProjIter operator+(const ptrdiff_t delta)
+  CONSTEXPR_AS_OF_CXX14 ProjIter operator+(const ptrdiff_t delta)
       const noexcept {
     auto copy = *this;
     copy += delta;
@@ -147,7 +147,7 @@ class ProjIter {
   }
 
   // Returns difference between two iterators.
-  constexpr ptrdiff_t operator-(const ProjIter& rhs) const noexcept {
+  constexpr difference_type operator-(const ProjIter& rhs) const noexcept {
     return index_ - rhs.index_;
   }
 
